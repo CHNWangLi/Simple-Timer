@@ -1,0 +1,30 @@
+class C:
+    def __getattr__(self, name): # 当用户试图获取一个不存在属性时的行为
+        print('getattr')
+    def __getattribute__(self, name): # 当该类的属性被访问时的行为
+        print('getattribute')
+        return super().__getattribute__(name)
+    def __setattr__(self, name, value): # 当一个属性被设置时的行为
+        print('setattr')
+        super().__setattr__(name, value)
+    def __delattr__(self, name): # 当一个属性被删除时的行为
+        print('delattr')
+        super().__delattr__(name)
+
+# 例子
+class Rectangle():
+    def __init__(self, width = 0, height = 0):
+        self.width = width
+        self.height = height
+
+    def __setattr__(self, name, value):
+        if name == 'square':
+            print('This is a square')
+            self.width = self.height = value
+        else:
+            super().__setattr__(name, value) # 调用基类，避免无限递归
+            # self.__dict__[name] = value
+            # 调用__dict__，也可避免无限递归
+
+    def getarea(self):
+        return self.width * self.height
