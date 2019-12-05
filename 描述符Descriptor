@@ -1,0 +1,70 @@
+class MyDescriptor():
+    def __get__(self, instance, owner):
+        # self描述符实例
+        # instance拥有者实例
+        # owner拥有者的类
+        # value所赋的值
+        print('Getting...', self, instance, owner)
+        
+    def __set__(self, instance, value):
+        print('Setting...', self, instance, value)
+
+    def __delete__(self, instance):
+        print('Deleting...', self, instance)
+    
+
+class test:
+    x = MyDescriptor() # 说明MyDesciptor是x的描述符,class Mydescriptor是描述符类
+
+
+### 例子，摄氏华氏转换    
+class MyProperty:
+    def __init__(self, fget=None, fset=None, fdel=None):
+        self.fget = fget
+        self.fset = fset
+        self.fdel = fdel
+
+    def __get__(self, instance, owner):
+        return self.fget(instance)
+    def __set__(self, instance, value):
+        self.fset(instance, value)
+    def __delete__(self, instance):
+        self.fdel(instance)
+
+class C:
+    def __init__(self):
+        self._x = None
+
+    def getX(self):
+        return self._x
+
+    def setX(self, value):
+        self._x = value
+
+    def delX(self):
+        del self._x
+
+    x = MyProperty(getX, setX, delX)
+
+### 例子
+
+class Celsius:
+    def __init__(self, value = 26.0):
+        self.value = float(value)
+
+    def __get__(self, instance, owner):
+        return self.value
+
+    def __set__(self, instance, value):
+        self.value = float(value) # 转换位浮点型
+        
+class Fahrenheit:
+    def __get__(self, instance, owner):
+        return instance.cel*1.8 + 32
+
+    def __set__(self, instance, value):
+        instance.cel = (float(value) - 32) / 1.8
+        
+class temperature:
+    cel = Celsius()
+    fah = Fahrenheit()
