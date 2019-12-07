@@ -1,0 +1,27 @@
+import urllib.request
+import urllib.parse
+import json
+
+content = input('Please input content:')
+url = 'http://fanyi.youdao.com/translate?smartresult=dict&smartresult=rule' #Headers中的Rquest URL
+data = {}  # 将Headers中From Data的数据写成字典
+data['i']=content
+data['from']='AUTO'
+data['to']='AUTO'
+data['smartresult']='dict'
+data['client']='fanyideskweb'
+data['salt']='15757064670200'
+data['sign']='903d9e28e70927ca1ad070504656a9c0'
+data['ts']='1575706467020'
+data['bv']='4ba8255e0451480d840ea6978fffec65'
+data['doctype']='json'
+data['version']='2.1'
+data['keyfrom']='fanyi.web'
+data['action']='FY_BY_REALTlME'
+data = urllib.parse.urlencode(data).encode('utf-8')
+
+response = urllib.request.urlopen(url, data)
+html = response.read().decode('utf-8')
+
+target = json.loads(html) #将json结构的返回值改写为列表形式
+print('Translatie result:%s' % (target['translateResult'][0][0]['tgt']))
