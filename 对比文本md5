@@ -1,0 +1,24 @@
+# 通过md5对比文本有无改动
+from tkinter import *
+import hashlib
+root = Tk()
+
+text1 = Text(root, width = 30, height = 10)
+text1.pack()
+text1.insert(INSERT, 'I Love sogou.com !!!')
+contents = text1.get('1.0', 'end')
+
+def getSig(contents):
+    m = hashlib.md5(contents.encode())
+    return m.digest()
+sig = getSig(contents)
+def check():
+    contents = text1.get('1.0', END)
+    if sig != getSig(contents):
+        print('Wrong')
+    else:
+        print("OK")
+    
+Button(root, text='Check', command = check).pack()
+
+mainloop()
