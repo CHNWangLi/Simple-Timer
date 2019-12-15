@@ -1,0 +1,17 @@
+from tkinter import *
+root = Tk()
+
+text1 = Text(root, width = 30, height = 10, undo = True, autoseparators = False)
+text1.pack()
+text1.insert(INSERT, 'I Love sogou.com !!!')
+
+def sep(event):
+    text1.edit_separator()
+text1.bind('<Key>', sep)
+
+def callback():
+    text1.edit_undo()
+
+Button(root,text = 'callback', command = callback).pack()
+
+mainloop()
