@@ -1,0 +1,40 @@
+from tkinter import *
+root = Tk()
+
+def callback():
+    print('Hello')
+    
+menubar = Menu(root)
+filemenu = Menu(menubar)  #在menubar中加入filemenu
+filemenu.add_command(label = 'Save', command = callback)
+filemenu.add_separator
+filemenu.add_command(label = 'Quit', command = root.destroy)
+menubar.add_cascade(label = 'File', menu = filemenu)  #将filemenu加入menubar
+
+popmenu = Menu(root)
+popmenu.add_command(label = 'Cut', command = callback)
+popmenu.add_command(label = 'Copy', command = callback)
+
+frame = Frame(root, width = 100, height = 100)
+frame.pack()
+def popup(event):
+    popmenu.post(event.x_root, event.y_root)
+frame.bind('<Button-3>', popup)
+
+root.config(menu = menubar)  #将menubabar绑定到root中
+
+mb = Menubutton(root, text = 'Menubutton', relief = RAISED) #设置窗口菜单
+mb.pack()
+mbmenu = Menu(mb, tearoff = False)
+openVar = IntVar()
+mbmenu.add_checkbutton(label = 'checkbutton',\
+                       command = callback, variable = openVar)
+mb.config(menu = mbmenu)
+
+options = ['a', 'b', 'c'] #建立下拉menu
+strVar =  StringVar()
+strVar.set(options[0])
+w = OptionMenu(root, strVar, *options) # *解包
+w.pack()
+
+mainloop()
